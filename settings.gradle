@@ -1,0 +1,6 @@
+rootProject.name = 'AdvancedPolyclinic'
+include 'repository'
+include 'interface'
+include 'service'
+include 'web'
+
