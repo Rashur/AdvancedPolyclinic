@@ -15,6 +15,7 @@ version '1.0-SNAPSHOT'
 
 dependencies {
     api project(":repository")
+    api group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
 }
 
 test {
