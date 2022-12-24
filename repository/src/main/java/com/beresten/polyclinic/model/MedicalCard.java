@@ -29,7 +29,7 @@ public class MedicalCard {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", nullable = false)
-    private User userId;
+    private User user;
 
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "medicalCardId")
     private List<Entry> entryList;

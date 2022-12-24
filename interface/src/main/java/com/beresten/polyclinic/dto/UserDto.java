@@ -1,5 +1,6 @@
 package com.beresten.polyclinic.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,9 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -40,6 +44,10 @@ public class UserDto {
     @Email
     private String email;
 
+    private String phoneNumber;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dateOfBirth;
 
 
 

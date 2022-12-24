@@ -15,7 +15,11 @@ version '1.0-SNAPSHOT'
 
 dependencies {
     api project(":interface")
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    api group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+    implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.3.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.5.3.Final"
+    api group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+
 }
 
 test {
