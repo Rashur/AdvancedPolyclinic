@@ -20,4 +20,5 @@ public interface UserService {
     List<UserDto> getAllUsers();
 
     void addUserRole(Integer id, String roleName);
+
 }
