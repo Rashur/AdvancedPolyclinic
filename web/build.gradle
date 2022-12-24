@@ -14,7 +14,7 @@ group 'com.beresten.polyclinic'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    api project(":service")
+    implementation project(":service")
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
 }
 
