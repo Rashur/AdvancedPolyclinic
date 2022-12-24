@@ -6,8 +6,8 @@ import com.beresten.polyclinic.mapper.UserMapper;
 import com.beresten.polyclinic.model.MedicalCard;
 import com.beresten.polyclinic.model.Role;
 import com.beresten.polyclinic.model.User;
-import com.beresten.polyclinic.model.WorkRole;
 import com.beresten.polyclinic.repository.MedicalCardRepository;
+import com.beresten.polyclinic.repository.RoleRepository;
 import com.beresten.polyclinic.repository.UserRepository;
 import com.beresten.polyclinic.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +29,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
+
+    private final RoleRepository roleRepository;
     private final MedicalCardRepository medicalCardRepository;
 
     @Override
@@ -39,9 +44,13 @@ public class UserServiceImpl implements UserService {
                     + userDto.getUsername() + " or email: "
                     + userDto.getEmail() + "is already exist");
         }
+        Role roleUser = roleRepository.findByName("ROLE_USER");
+        Role rolePatient = roleRepository.findByName("ROLE_PATIENT");
+        List<Role> roles = new ArrayList<>();
+        roles.add(roleUser);
+        roles.add(rolePatient);
         var user = userMapper.userDtoToUser(userDto);
-        user.setRole(Role.ROLE_USER);
-        user.setWorkRole(WorkRole.PATIENT);
+        user.setRoles(roles);
         var medicalCard = new MedicalCard();
         medicalCard.setUser(user);
         userRepository.save(user);
@@ -74,5 +83,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeUserWorkRole(Integer id, String workRole) {
 
+    }
+
+    @Override
+    public void saveRole(Role role) {
+        roleRepository.save(role);
     }
 }
