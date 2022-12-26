@@ -1,7 +1,9 @@
 package com.beresten.polyclinic.service.impl;
 
 import com.beresten.polyclinic.dto.UserDto;
+import com.beresten.polyclinic.exception.RoleNotFoundException;
 import com.beresten.polyclinic.exception.UserAlreadyExistException;
+import com.beresten.polyclinic.exception.UserNotFoundException;
 import com.beresten.polyclinic.mapper.UserMapper;
 import com.beresten.polyclinic.model.MedicalCard;
 import com.beresten.polyclinic.model.Role;
@@ -44,6 +46,9 @@ public class UserServiceImpl implements UserService {
                     + userDto.getUsername() + " or email: "
                     + userDto.getEmail() + "is already exist");
         }
+        log.info("IN UserServiceImpl saveUser() found user with username: {}, email: {}",
+                userDto.getUsername(),
+                userDto.getEmail());
         Role roleUser = roleRepository.findByName("ROLE_USER");
         Role rolePatient = roleRepository.findByName("ROLE_PATIENT");
         List<Role> roles = new ArrayList<>();
@@ -54,18 +59,45 @@ public class UserServiceImpl implements UserService {
         var medicalCard = new MedicalCard();
         medicalCard.setUser(user);
         userRepository.save(user);
+        log.info("IN UserServiceImpl saveUser() save user: {}", user);
         medicalCardRepository.save(medicalCard);
+        log.info("IN UserServiceImpl saveUser() save medical card: {}", medicalCard);
         return userDto;
     }
 
     @Override
     public UserDto getUser(String username) {
-        return null;
+        var user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UserNotFoundException("User with username: " + username + " not found");
+        }
+        return userMapper.userToUserDto(user);
     }
 
     @Override
     public UserDto getUserById(Integer id) {
-        return null;
+        var user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + id + " not found"));
+        return userMapper.userToUserDto(user);
+    }
+
+    @Override
+    public UserDto update(Integer id, UserDto userDto) {
+        var user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + id + " not found"));
+        userDto.setId(id);
+        userRepository.save(userMapper.userDtoToUser(userDto));
+        return userDto;
+    }
+
+    @Override
+    public void delete(Integer id) {
+        var user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + id + " not found"));
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -81,12 +113,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeUserWorkRole(Integer id, String workRole) {
-
+    public void addUserRole(Integer id, String roleName) {
+        var role = roleRepository.findByName(roleName);
+        if (role == null) {
+            throw new RoleNotFoundException("Role with name: " + roleName + " not found");
+        }
+        var user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + id + " not found"));
+        user.getRoles().add(role);
+        userRepository.save(user);
     }
 
-    @Override
-    public void saveRole(Role role) {
-        roleRepository.save(role);
-    }
 }
