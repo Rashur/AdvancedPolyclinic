@@ -13,9 +13,11 @@ public interface UserService {
 
     UserDto getUserById(Integer id);
 
+    UserDto update(Integer id, UserDto userDto);
+
+    void delete(Integer id);
+
     List<UserDto> getAllUsers();
 
-    void changeUserWorkRole(Integer id, String workRole);
-
-    void saveRole(Role role);
+    void addUserRole(Integer id, String roleName);
 }
