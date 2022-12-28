@@ -1,31 +1,62 @@
 package com.beresten.polyclinic.config;
 
+import com.beresten.polyclinic.jwt.JwtTokenFilter;
+import com.beresten.polyclinic.jwt.JwtTokenProvider;
+import com.beresten.polyclinic.jwt.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled = true,
+        jsr250Enabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.csrf().disable();
-//        http
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//        http.authorizeHttpRequests()
-//                .requestMatchers(HttpMethod.GET, "/api/v1/user").permitAll();
-//        return http.build();
-//    }
+    private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
+    private static final String USER_ENDPOINT = "/api/v1/user/**";
+
+    private final JwtUserDetailsService userDetailsService;
+    private final JwtTokenFilter jwtTokenFilter;
+    private final JwtTokenProvider jwtTokenProvider;
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .httpBasic().disable()
+                .cors()
+                .and()
+                .csrf().disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeHttpRequests()
+                .requestMatchers(LOGIN_ENDPOINT).permitAll()
+                .requestMatchers(HttpMethod.POST, USER_ENDPOINT).permitAll()
+                .requestMatchers(HttpMethod.PUT ,USER_ENDPOINT).hasRole("PATIENT")
+                .requestMatchers(HttpMethod.GET, USER_ENDPOINT).hasRole("DOCTOR")
+                .requestMatchers(HttpMethod.DELETE, USER_ENDPOINT).hasRole("DOCTOR")
+                .anyRequest().authenticated()
+                .and()
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -1,16 +1,17 @@
 package com.beresten.polyclinic.dto;
 
+import com.beresten.polyclinic.model.Entry;
+import com.beresten.polyclinic.model.MedicalCard;
+import com.beresten.polyclinic.model.Role;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,7 +27,7 @@ public class UserDto {
 
     @NotNull
     @NotBlank
-    @Size(min = 6, max = 30)
+    @Size(min = 5, max = 30)
     private String password;
 
     @NotNull
@@ -49,6 +50,9 @@ public class UserDto {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
 
+    private List<Entry> entryList;
+
+    private List<MedicalCard> medicalCardList;
 
 
 }

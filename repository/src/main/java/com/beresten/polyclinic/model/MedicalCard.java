@@ -1,5 +1,6 @@
 package com.beresten.polyclinic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,6 +28,7 @@ public class MedicalCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -34,5 +36,12 @@ public class MedicalCard {
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "medicalCardId")
     private List<Entry> entryList;
 
-
+    @Override
+    public String toString() {
+        return "MedicalCard{" +
+                "id=" + id +
+                ", user=" + user +
+                ", entryList=" + entryList.stream().map(entry -> entry.getId()) +
+                '}';
+    }
 }

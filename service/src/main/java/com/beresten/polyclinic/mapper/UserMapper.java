@@ -20,7 +20,9 @@ public interface UserMapper {
             @Mapping(target = "lastName", source = "lastName"),
             @Mapping(target = "email", source = "email"),
             @Mapping(target = "phoneNumber", source = "phoneNumber"),
-            @Mapping(target = "dateOfBirth", source = "dateOfBirth")
+            @Mapping(target = "dateOfBirth", source = "dateOfBirth"),
+            @Mapping(target = "entryList", source = "entryList"),
+            @Mapping(target = "medicalCardList", source = "medicalCardList")
     })
     UserDto userToUserDto(User user);
 
@@ -32,7 +34,9 @@ public interface UserMapper {
             @Mapping(target = "lastName", source = "lastName"),
             @Mapping(target = "email", source = "email"),
             @Mapping(target = "phoneNumber", source = "phoneNumber"),
-            @Mapping(target = "dateOfBirth", source = "dateOfBirth")
+            @Mapping(target = "dateOfBirth", source = "dateOfBirth"),
+            @Mapping(target = "entryList", source = "entryList"),
+            @Mapping(target = "medicalCardList", source = "medicalCardList")
     })
     User userDtoToUser(UserDto userDto);
 }
