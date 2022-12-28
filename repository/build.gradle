@@ -17,6 +17,7 @@ version '1.0-SNAPSHOT'
 dependencies {
     implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.1'
     api group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+    api 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
 }
 
 test {

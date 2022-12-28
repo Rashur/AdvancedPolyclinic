@@ -14,6 +14,7 @@ import com.beresten.polyclinic.repository.UserRepository;
 import com.beresten.polyclinic.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,8 +36,10 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final MedicalCardRepository medicalCardRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Override
-    public UserDto saveUser(UserDto userDto) {
+    public User saveUser(UserDto userDto) {
         var existUser = userRepository
                 .findUserByUsernameOrEmail(
                         userDto.getUsername(),
@@ -56,22 +59,23 @@ public class UserServiceImpl implements UserService {
         roles.add(rolePatient);
         var user = userMapper.userDtoToUser(userDto);
         user.setRoles(roles);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         var medicalCard = new MedicalCard();
         medicalCard.setUser(user);
-        userRepository.save(user);
-        log.info("IN UserServiceImpl saveUser() save user: {}", user);
         medicalCardRepository.save(medicalCard);
-        log.info("IN UserServiceImpl saveUser() save medical card: {}", medicalCard);
-        return userDto;
+        log.info("IN UserServiceImpl saveUser() save medical card with user id: {}", medicalCard.getUser().getId());
+        var savedUser = userRepository.save(user);
+        log.info("IN UserServiceImpl saveUser() save user with username: {}", user.getUsername());
+        return savedUser;
     }
 
     @Override
-    public UserDto getUser(String username) {
+    public User getUserByUsername(String username) {
         var user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UserNotFoundException("User with username: " + username + " not found");
         }
-        return userMapper.userToUserDto(user);
+        return user;
     }
 
     @Override

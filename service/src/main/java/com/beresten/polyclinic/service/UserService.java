@@ -2,14 +2,15 @@ package com.beresten.polyclinic.service;
 
 import com.beresten.polyclinic.dto.UserDto;
 import com.beresten.polyclinic.model.Role;
+import com.beresten.polyclinic.model.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserDto saveUser(UserDto userDto);
+    User saveUser(UserDto userDto);
 
-    UserDto getUser(String username);
+    User getUserByUsername(String username);
 
     UserDto getUserById(Integer id);
 

@@ -1,6 +1,7 @@
 package com.beresten.polyclinic.controller;
 
 import com.beresten.polyclinic.dto.UserDto;
+import com.beresten.polyclinic.model.User;
 import com.beresten.polyclinic.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +26,14 @@ public class UserController {
 
     @PostMapping("/user")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto saveUser(@RequestBody @Valid UserDto userDto) {
+    public User saveUser(@RequestBody @Valid UserDto userDto) {
         return userService.saveUser(userDto);
     }
 
     @GetMapping("/user")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUserByUsername(@RequestParam String username) {
-        return userService.getUser(username);
+    public User getUserByUsername(@RequestParam String username) {
+        return userService.getUserByUsername(username);
     }
 
     @GetMapping("/user/{id}")
