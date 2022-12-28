@@ -22,7 +22,6 @@ public class Role {
     @Column(name = "role_name")
     private String name;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<User> userList;
 
