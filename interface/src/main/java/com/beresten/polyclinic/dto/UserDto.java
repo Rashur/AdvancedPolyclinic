@@ -54,5 +54,19 @@ public class UserDto {
 
     private List<MedicalCard> medicalCardList;
 
-
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", entryList=" + entryList.stream().map(entry -> entry.getId()) +
+                ", medicalCardList=" + medicalCardList.stream().map(medicalCard -> medicalCard.getId()) +
+                '}';
+    }
 }
