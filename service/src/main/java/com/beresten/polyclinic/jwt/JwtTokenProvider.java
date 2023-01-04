@@ -10,6 +10,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,9 +28,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private String secret = "secretkey";
+    @Value("${jwt.token.secret}")
+    private String secret;
 
-    private Long validityInMilliseconds = 3600000L;
+    @Value("${jwt.token.expired}")
+    private Long validityInMilliseconds;
 
     private final UserDetailsService userDetailsService;
 
