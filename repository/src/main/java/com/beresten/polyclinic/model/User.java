@@ -1,5 +1,6 @@
 package com.beresten.polyclinic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,6 +42,7 @@ public class User {
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
     joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

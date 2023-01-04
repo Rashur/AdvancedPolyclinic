@@ -1,8 +1,6 @@
 package com.beresten.polyclinic.config;
 
 import com.beresten.polyclinic.jwt.JwtTokenFilter;
-import com.beresten.polyclinic.jwt.JwtTokenProvider;
-import com.beresten.polyclinic.jwt.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,9 +26,8 @@ public class SecurityConfig {
     private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
     private static final String USER_ENDPOINT = "/api/v1/user/**";
 
-    private final JwtUserDetailsService userDetailsService;
     private final JwtTokenFilter jwtTokenFilter;
-    private final JwtTokenProvider jwtTokenProvider;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
