@@ -55,4 +55,11 @@ public class UserController {
         userService.delete(id);
     }
 
+    @PutMapping("/user-role/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void addRoleForUser(@PathVariable Integer id,
+                               @RequestParam String roleName) {
+        userService.addUserRole(id, roleName);
+    }
+
 }

@@ -25,6 +25,7 @@ public class SecurityConfig {
 
     private static final String LOGIN_ENDPOINT = "/api/v1/auth/login";
     private static final String USER_ENDPOINT = "/api/v1/user/**";
+    private static final String USER_ADD_ROLE_ENDPOINT = "/api/v1/user-role/**";
 
     private final JwtTokenFilter jwtTokenFilter;
 
@@ -44,6 +45,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT ,USER_ENDPOINT).hasRole("PATIENT")
                 .requestMatchers(HttpMethod.GET, USER_ENDPOINT).hasRole("DOCTOR")
                 .requestMatchers(HttpMethod.DELETE, USER_ENDPOINT).hasRole("DOCTOR")
+                .requestMatchers(HttpMethod.PUT, USER_ADD_ROLE_ENDPOINT).hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
